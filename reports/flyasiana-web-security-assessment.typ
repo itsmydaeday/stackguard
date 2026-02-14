@@ -70,5 +70,40 @@
 == Appendix A — Rules of Engagement (RoE)
 - Paste the finalized RoE here.
 
-== Appendix B — Asset inventory (raw)
-- Link/attach the Markdown raw export.
+== Appendix B — Asset inventory (preliminary)
+This section will be finalized once raw exports (subdomains/DNS/live endpoints) are ingested.
+
+=== Observed hostnames (from provided screenshot)
+- `flyasiana.com`
+- `www.flyasiana.com`
+- `weblog.flyasiana.com`
+- `promo.flyasiana.com`
+- `eum.flyasiana.com`
+- `asiana350.flyasiana.com`
+- `supersale.flyasiana.com`
+- `msupersale.flyasiana.com`
+- `dreamfare.flyasiana.com`
+- `amfare.flyasiana.com`
+
+=== Observed IPs (from provided screenshot)
+> Note: IP ownership/CDN provider not asserted in this report without corroborating evidence.
+
+- 23.205.247.12
+- 95.101.203.245
+- 23.222.54.97
+- 23.54.9.24
+- 104.70.95.193
+- 23.67.131.84
+- 104.64.31.100
+- 23.207.123.47
+- 23.212.223.99
+- 23.199.221.196
+- 23.54.109.104
+- 104.102.58.201
+- 23.2.237.44
+- 23.2.237.212
+- 2.20.22.142
+- 104.111.238.198
+
+=== Raw data export
+- Link/attach `pentest/flyasiana/RAW_DATA_EXPORT.md`
