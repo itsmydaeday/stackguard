@@ -16,6 +16,12 @@ Things like:
 ## Examples
 
 ```markdown
+### Installed CLIs (gateway host)
+
+- npm → /usr/bin/npm (v10.9.4)
+- gh (GitHub CLI) → /usr/bin/gh (v2.46.0)
+- codex (AI coding CLI) → /home/ubuntu/.npm-global/bin/codex (codex-cli v0.101.0)
+
 ### Cameras
 
 - living-room → Main area, 180° wide angle
