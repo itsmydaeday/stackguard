@@ -22,7 +22,7 @@ Things like:
 - gh (GitHub CLI) → /usr/bin/gh (v2.46.0)
 - codex (AI coding CLI) → /home/ubuntu/.npm-global/bin/codex (codex-cli v0.101.0)
 - nmap → /usr/bin/nmap (v7.95)
-- gobuster → not installed on gateway host (apt candidate: 3.6.0-1)
+- gobuster → /home/ubuntu/go/bin/gobuster (v3.8.2) (not in default PATH)
 
 ### Cameras
 
