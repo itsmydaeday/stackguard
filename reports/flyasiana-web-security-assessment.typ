@@ -12,6 +12,7 @@
 - Target: *flyasiana.com* (and authorized subdomains)
 - Testing window: 22:00–04:00 UTC
 - Constraints: see Appendix A (RoE)
+- Evidence: Authorization screenshot stored in repo under `pentest/flyasiana/evidence/authorization-2026-02-14.png`
 
 == Executive summary (English)
 === Objectives
