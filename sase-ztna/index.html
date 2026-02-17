@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SASE vs ZTNA — Animated Comparison</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a33;
+      --line: #2a3a6a;
+      --text: #eef3ff;
+      --muted: #a9b7df;
+      --sase: #6ee7ff;
+      --ztna: #a78bfa;
+      --accent: #34d399;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at 20% 10%, #1a2752 0%, var(--bg) 40%), var(--bg);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 2vw, 2.2rem);
+      margin: 0 0 8px;
+    }
+
+    .sub {
+      color: var(--muted);
+      margin-bottom: 22px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    button {
+      background: #1b2850;
+      border: 1px solid #33467f;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px #34d39922;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: linear-gradient(180deg, #131d3c 0%, #0f1731 100%);
+      border: 1px solid #263763;
+      border-radius: 16px;
+      padding: 14px;
+      min-height: 420px;
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .tag {
+      font-size: 12px;
+      color: #08111f;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .tag.sase { background: var(--sase); }
+    .tag.ztna { background: var(--ztna); }
+
+    .diagram {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      height: 280px;
+      overflow: hidden;
+      background: #0a1227;
+    }
+
+    .node {
+      position: absolute;
+      border: 1px solid #3d4f89;
+      border-radius: 10px;
+      padding: 6px 8px;
+      background: #16224a;
+      font-size: 12px;
+      text-align: center;
+      min-width: 88px;
+    }
+
+    .line {
+      position: absolute;
+      height: 2px;
+      transform-origin: left center;
+      opacity: 0.65;
+    }
+
+    .pulse {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      filter: drop-shadow(0 0 8px currentColor);
+      animation: move 4s linear infinite;
+    }
+
+    @keyframes move {
+      0%   { transform: translateX(0); opacity: 0.1; }
+      10%  { opacity: 1; }
+      100% { transform: translateX(210px); opacity: 0.1; }
+    }
+
+    .content {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .content b { color: #d8e2ff; }
+
+    .compare {
+      margin-top: 16px;
+      background: #0f1730;
+      border: 1px solid #2a3f72;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    ul { margin: 8px 0 0 18px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SASE vs ZTNA</h1>
+    <div class="sub">Side-by-side animated architecture + practical comparison by <b>Architecture</b>, <b>Use Case</b>, and <b>Implementation</b>.</div>
+
+    <div class="controls">
+      <button class="active" data-mode="architecture">Architecture</button>
+      <button data-mode="usecase">Use Case</button>
+      <button data-mode="implementation">Implementation</button>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div class="title">SASE <span class="tag sase">Cloud-native Security Stack</span></div>
+        <div class="diagram" id="saseDiagram"></div>
+        <div class="content" id="saseText"></div>
+      </section>
+
+      <section class="panel">
+        <div class="title">ZTNA <span class="tag ztna">App-level Zero Trust Access</span></div>
+        <div class="diagram" id="ztnaDiagram"></div>
+        <div class="content" id="ztnaText"></div>
+      </section>
+    </div>
+
+    <div class="compare" id="bottomCompare"></div>
+  </div>
+
+  <script>
+    const modes = {
+      architecture: {
+        saseText: `<b>SASE Architecture:</b> Combines SD-WAN + SWG + CASB + FWaaS + ZTNA in a unified cloud platform. Traffic from branch, HQ, and remote users is steered to nearest PoP, then policy-enforced before internet/SaaS/private app access.`,
+        ztnaText: `<b>ZTNA Architecture:</b> User/device connects to a broker, which verifies identity and posture, then grants per-application access through a connector. No broad network-level trust; access is app-specific and continuously evaluated.`,
+        compare: `<b>Architecture Summary</b><ul><li><b>SASE:</b> broad network + security convergence.</li><li><b>ZTNA:</b> focused zero-trust access control for private apps.</li><li><b>Relationship:</b> ZTNA is often one component inside a larger SASE design.</li></ul>`
+      },
+      usecase: {
+        saseText: `<b>Best for:</b> Organizations modernizing WAN/security globally. Great when you need one policy plane across branches, roaming users, SaaS, and internet breakout.`,
+        ztnaText: `<b>Best for:</b> Replacing VPN for secure remote access to internal apps. Great for least-privilege access, third-party/vendor access, and micro-segmented app publishing.`,
+        compare: `<b>Use Case Summary</b><ul><li><b>SASE:</b> enterprise-wide transformation (network + security).</li><li><b>ZTNA:</b> targeted secure-access transformation (VPN replacement).</li><li><b>Rule of thumb:</b> Start ZTNA fast for access risk, then expand toward SASE for full stack convergence.</li></ul>`
+      },
+      implementation: {
+        saseText: `<b>Implementation:</b> 1) Inventory flows/users/sites 2) Deploy edge/client steering 3) Migrate policy to cloud security stack 4) Phase by region/app criticality 5) optimize with telemetry and QoS.`,
+        ztnaText: `<b>Implementation:</b> 1) Classify private apps 2) Deploy connectors near apps 3) Integrate IdP + device posture 4) Enforce app-level least privilege 5) retire VPN segments gradually.`,
+        compare: `<b>Implementation Summary</b><ul><li><b>SASE:</b> larger program; touches network, security, identity, and operations.</li><li><b>ZTNA:</b> usually faster to pilot and prove value.</li><li><b>Common pitfall:</b> migrating controls without cleaning legacy policy sprawl.</li></ul>`
+      }
+    };
+
+    function node(diagram, label, x, y) {
+      const el = document.createElement('div');
+      el.className = 'node';
+      el.style.left = x + 'px';
+      el.style.top = y + 'px';
+      el.textContent = label;
+      diagram.appendChild(el);
+    }
+
+    function link(diagram, x, y, w, color) {
+      const line = document.createElement('div');
+      line.className = 'line';
+      line.style.left = x + 'px';
+      line.style.top = y + 'px';
+      line.style.width = w + 'px';
+      line.style.background = color;
+      diagram.appendChild(line);
+
+      const p = document.createElement('div');
+      p.className = 'pulse';
+      p.style.left = x + 'px';
+      p.style.top = (y - 3) + 'px';
+      p.style.color = color;
+      p.style.background = color;
+      p.style.animationDuration = (3 + Math.random() * 2).toFixed(1) + 's';
+      p.style.animationDelay = (Math.random() * 1.5).toFixed(1) + 's';
+      diagram.appendChild(p);
+    }
+
+    function renderDiagrams() {
+      const sase = document.getElementById('saseDiagram');
+      const ztna = document.getElementById('ztnaDiagram');
+      sase.innerHTML = '';
+      ztna.innerHTML = '';
+
+      node(sase, 'Users', 10, 18);
+      node(sase, 'Branch', 10, 112);
+      node(sase, 'SASE PoP', 145, 66);
+      node(sase, 'Security Services\n(SWG/CASB/FWaaS/ZTNA)', 270, 66);
+      node(sase, 'SaaS / Internet', 150, 200);
+      node(sase, 'Private Apps', 300, 200);
+      link(sase, 95, 35, 120, '#6ee7ff');
+      link(sase, 95, 128, 120, '#6ee7ff');
+      link(sase, 230, 82, 120, '#34d399');
+      link(sase, 205, 218, 95, '#6ee7ff');
+      link(sase, 335, 218, 60, '#34d399');
+
+      node(ztna, 'User + Device', 10, 66);
+      node(ztna, 'Identity Provider', 10, 180);
+      node(ztna, 'ZTNA Broker', 160, 66);
+      node(ztna, 'App Connector', 300, 66);
+      node(ztna, 'Private App A', 300, 150);
+      node(ztna, 'Private App B', 300, 220);
+      link(ztna, 105, 82, 120, '#a78bfa');
+      link(ztna, 105, 196, 120, '#a78bfa');
+      link(ztna, 245, 82, 120, '#34d399');
+      link(ztna, 355, 166, 70, '#a78bfa');
+      link(ztna, 355, 236, 70, '#a78bfa');
+    }
+
+    function setMode(mode) {
+      document.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', b.dataset.mode === mode);
+      });
+      document.getElementById('saseText').innerHTML = modes[mode].saseText;
+      document.getElementById('ztnaText').innerHTML = modes[mode].ztnaText;
+      document.getElementById('bottomCompare').innerHTML = modes[mode].compare;
+    }
+
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => setMode(btn.dataset.mode));
+    });
+
+    renderDiagrams();
+    setMode('architecture');
+  </script>
+</body>
+</html>
