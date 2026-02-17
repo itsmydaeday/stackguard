@@ -165,7 +165,7 @@
 <body>
   <div class="wrap">
     <h1>SASE vs ZTNA</h1>
-    <div class="sub">Side-by-side animated architecture + practical comparison by <b>Architecture</b>, <b>Use Case</b>, and <b>Implementation</b>.</div>
+    <div class="sub">Side-by-side animated architecture + practical comparison by <b>Architecture</b>, <b>Use Case</b>, and <b>Implementation</b>. Content is grounded in NIST/CISA zero trust guidance and widely accepted SASE definitions.</div>
 
     <div class="controls">
       <button class="active" data-mode="architecture">Architecture</button>
@@ -188,24 +188,33 @@
     </div>
 
     <div class="compare" id="bottomCompare"></div>
+
+    <div class="compare" style="margin-top:12px">
+      <b>Research Sources</b>
+      <ul>
+        <li>NIST SP 800-207 (Zero Trust Architecture): <a href="https://csrc.nist.gov/pubs/sp/800/207/final" target="_blank" rel="noopener">csrc.nist.gov/pubs/sp/800/207/final</a></li>
+        <li>CISA Zero Trust Maturity Model v2.0 overview: <a href="https://www.cisa.gov/zero-trust-maturity-model" target="_blank" rel="noopener">cisa.gov/zero-trust-maturity-model</a></li>
+        <li>SASE term/components summary (industry reference): <a href="https://en.wikipedia.org/wiki/Secure_Access_Service_Edge" target="_blank" rel="noopener">wikipedia.org/wiki/Secure_Access_Service_Edge</a></li>
+      </ul>
+    </div>
   </div>
 
   <script>
     const modes = {
       architecture: {
-        saseText: `<b>SASE Architecture:</b> Combines SD-WAN + SWG + CASB + FWaaS + ZTNA in a unified cloud platform. Traffic from branch, HQ, and remote users is steered to nearest PoP, then policy-enforced before internet/SaaS/private app access.`,
-        ztnaText: `<b>ZTNA Architecture:</b> User/device connects to a broker, which verifies identity and posture, then grants per-application access through a connector. No broad network-level trust; access is app-specific and continuously evaluated.`,
-        compare: `<b>Architecture Summary</b><ul><li><b>SASE:</b> broad network + security convergence.</li><li><b>ZTNA:</b> focused zero-trust access control for private apps.</li><li><b>Relationship:</b> ZTNA is often one component inside a larger SASE design.</li></ul>`
+        saseText: `<b>SASE Architecture:</b> A cloud-delivered model that converges WAN connectivity (typically SD-WAN) with security services such as SWG, CASB, FWaaS, and often ZTNA, delivered through distributed PoPs closer to users and branches.`,
+        ztnaText: `<b>ZTNA Architecture:</b> Based on zero-trust principles: no implicit trust by network location; authenticate and authorize subject + device before session establishment; grant least-privilege access at the application/resource level.`,
+        compare: `<b>Architecture Summary</b><ul><li><b>SASE:</b> combines networking + multiple cloud security controls.</li><li><b>ZTNA:</b> identity/context-driven access to specific apps/resources.</li><li><b>Relationship:</b> ZTNA commonly appears as one control inside a broader SASE/SSE strategy.</li></ul>`
       },
       usecase: {
-        saseText: `<b>Best for:</b> Organizations modernizing WAN/security globally. Great when you need one policy plane across branches, roaming users, SaaS, and internet breakout.`,
-        ztnaText: `<b>Best for:</b> Replacing VPN for secure remote access to internal apps. Great for least-privilege access, third-party/vendor access, and micro-segmented app publishing.`,
-        compare: `<b>Use Case Summary</b><ul><li><b>SASE:</b> enterprise-wide transformation (network + security).</li><li><b>ZTNA:</b> targeted secure-access transformation (VPN replacement).</li><li><b>Rule of thumb:</b> Start ZTNA fast for access risk, then expand toward SASE for full stack convergence.</li></ul>`
+        saseText: `<b>Best for:</b> Enterprises with hybrid users, branch offices, and heavy SaaS/public-internet traffic that want consistent policy enforcement and lower-latency cloud access without backhauling to data centers.`,
+        ztnaText: `<b>Best for:</b> Replacing broad network VPN access with per-app least-privilege access, especially for remote staff, contractors, and third parties needing segmented access to private apps.`,
+        compare: `<b>Use Case Summary</b><ul><li><b>SASE:</b> larger operating model change across connectivity + security.</li><li><b>ZTNA:</b> focused access-control modernization with faster initial wins.</li><li><b>Rule of thumb:</b> ZTNA first for risky remote access paths; SASE for long-term platform consolidation.</li></ul>`
       },
       implementation: {
-        saseText: `<b>Implementation:</b> 1) Inventory flows/users/sites 2) Deploy edge/client steering 3) Migrate policy to cloud security stack 4) Phase by region/app criticality 5) optimize with telemetry and QoS.`,
-        ztnaText: `<b>Implementation:</b> 1) Classify private apps 2) Deploy connectors near apps 3) Integrate IdP + device posture 4) Enforce app-level least privilege 5) retire VPN segments gradually.`,
-        compare: `<b>Implementation Summary</b><ul><li><b>SASE:</b> larger program; touches network, security, identity, and operations.</li><li><b>ZTNA:</b> usually faster to pilot and prove value.</li><li><b>Common pitfall:</b> migrating controls without cleaning legacy policy sprawl.</li></ul>`
+        saseText: `<b>Implementation:</b> 1) Baseline current WAN + security controls 2) Define policy by identity, app, and risk context 3) Roll out branch/user traffic steering to PoPs 4) Migrate controls in phases (SWG/CASB/FWaaS/ZTNA) 5) continuously tune performance and policy.`,
+        ztnaText: `<b>Implementation:</b> 1) Inventory private apps and user groups 2) Integrate strong identity + MFA + device posture checks 3) Deploy connectors near apps 4) enforce app-level least privilege 5) monitor sessions continuously and retire legacy VPN paths incrementally.`,
+        compare: `<b>Implementation Summary</b><ul><li><b>SASE:</b> broad, multi-team program (network, security, identity, operations).</li><li><b>ZTNA:</b> narrower scope and typically faster pilot-to-production.</li><li><b>Common pitfall:</b> lifting old coarse policies into new tooling without least-privilege redesign.</li></ul>`
       }
     };
 
