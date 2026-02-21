@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" role="img" aria-label="Profile placeholder image for Madison Lust">
+  <defs>
+    <linearGradient id="g2" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="100%" stop-color="#fb7185"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="640" rx="36" fill="#0f172a"/>
+  <circle cx="320" cy="240" r="120" fill="url(#g2)" opacity="0.9"/>
+  <rect x="140" y="390" width="360" height="140" rx="70" fill="#1e293b"/>
+  <text x="320" y="585" text-anchor="middle" fill="#cbd5e1" font-family="Inter,Arial,sans-serif" font-size="28">Madison Lust • Placeholder</text>
+</svg>

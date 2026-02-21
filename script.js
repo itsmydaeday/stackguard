@@ -1,14 +1,14 @@
 const buttons = document.querySelectorAll('.tab-btn');
 const panels = document.querySelectorAll('.tab-panel');
 
-buttons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
+buttons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const { tab } = button.dataset;
 
     buttons.forEach((b) => b.classList.remove('active'));
     panels.forEach((p) => p.classList.remove('active'));
 
-    btn.classList.add('active');
+    button.classList.add('active');
     document.getElementById(tab)?.classList.add('active');
   });
 });
