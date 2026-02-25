@@ -1,0 +1,51 @@
+services:
+  localstack:
+    image: localstack/localstack:3.8
+    ports:
+      - '4566:4566'
+    environment:
+      - SERVICES=s3,iam,kms,cloudtrail,logs
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+    volumes:
+      - localstack-data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-dev-only-secret}
+      - DATABASE_URL=sqlite:///./stackguard.db
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - DEFAULT_ADMIN_PASSWORD=${DEFAULT_ADMIN_PASSWORD:-admin123!}
+    depends_on:
+      - localstack
+    ports:
+      - '8000:8000'
+
+  worker:
+    build:
+      context: ./worker
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - LOCALSTACK_ENDPOINT=http://localstack:4566
+      - AWS_REGION=${AWS_REGION:-us-east-1}
+      - WORKER_INTERVAL_SECONDS=30
+    depends_on:
+      - backend
+      - localstack
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-http://localhost:8000}
+    depends_on:
+      - backend
+    ports:
+      - '3000:3000'
+
+volumes:
+  localstack-data:
