@@ -6,7 +6,7 @@ _Learn about the person you're helping. Update this as you go._
 - **What to call them:** Dae
 - **Pronouns:** _(optional)_
 - **Timezone:** _(unknown)_
-- **Notes:** Prefers not to use OpenClaw node mode; do tasks on the gateway host and deliver results back in chat/files.
+- **Notes:** Prefers not to use OpenClaw node mode; do tasks on the gateway host and deliver results back in chat/files. Prefers mobile-first UI design for web builds.
 
 ## Context
 
